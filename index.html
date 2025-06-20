@@ -30,11 +30,12 @@
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/",
-        "@splats/": "https://cdn.jsdelivr.net/npm/@mkkellogg/gaussian-splats-3d@0.4.7/build/"
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/"
       }
     }
   </script>
+  <!-- SuperSplat viewer UMD global (SuperSplatViewer) -->
+  <script src="https://unpkg.com/supersplat-viewer@latest/dist/supersplat-viewer.min.js"></script>
 </head>
 <body>
   <div id="infos"><h1>Guillaume Dullier</h1><p>BIM Modeleur • 43 Rue de la République, 69220 Belleville-en-Beaujolais</p><p><a href="https://wa.me/33610262935" class="wa-btn" target="_blank" rel="noopener" aria-label="Appeler sur WhatsApp"><img src="https://img.icons8.com/color/24/000000/whatsapp.png" alt="WhatsApp"></a> 06 10 26 29 35 • ✉️ <a href="mailto:guillaumedullier@hotmail.fr">guillaumedullier@hotmail.fr</a></p></div>
@@ -47,7 +48,6 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
-    import * as GaussianSplats3D from '@splats/gaussian-splats-3d.module.js';
 
     const Z = new THREE.Vector3(0, 0, 1);
 
@@ -55,42 +55,31 @@
       const c = document.getElementById(id);
 
       /* ------------------------------------------------------------------
-         Affichage .splat via Viewer « tout‑en‑un » (plus fiable)
+         Cas .splat — affichage via SuperSplatViewer
          ------------------------------------------------------------------ */
       if (file.endsWith('.splat')) {
         const splatUrl = /^https?:\/\//.test(file)
           ? file
           : new URL(`assets/${file}`, import.meta.url).href;
 
-        // Crée un viewer autosuffisant (canvas, caméra, controls, loop)
-        const gsViewer = new GaussianSplats3D.Viewer({
-          sharedMemoryForWorkers: false, // force le fallback sans SharedArrayBuffer
-          showLoadingUI: true,
+        // Crée un SuperSplatViewer dans le conteneur
+        const ssViewer = new window.SuperSplatViewer({
+          container: c,
+          url: splatUrl,
+          autoRotate: false,
         });
 
-        gsViewer
-          .addSplatScene(splatUrl, {
-            scale: [scale, scale, scale],
-          })
-          .then(() => {
-            gsViewer.start();
-            // Place son canvas dans notre conteneur
-            c.appendChild(gsViewer.renderer.domElement);
-            // Ajuste la taille en même temps que la div
-            const resize = () => {
-              const w = c.clientWidth;
-              const h = c.clientHeight;
-              gsViewer.renderer.setSize(w, h);
-              gsViewer.camera.aspect = w / h;
-              gsViewer.camera.updateProjectionMatrix();
-            };
-            resize();
-            window.addEventListener('resize', resize);
-          })
-          .catch((err) => console.error('Échec du chargement du .splat :', err));
-        return; // on quitte : pas besoin de notre pipeline Three.js
+        // Ajuster la taille au redimensionnement
+        const resize = () => {
+          const w = c.clientWidth;
+          const h = c.clientHeight;
+          ssViewer.setSize(w, h);
+        };
+        resize();
+        window.addEventListener('resize', resize);
+        return; // Pas de pipeline Three.js nécessaire
       }
-      
+      /* ------------------------------------------------------------------ */
 
       const scene = new THREE.Scene();
       scene.background = new THREE.Color(0xf6f6f9);
@@ -163,31 +152,4 @@
         cam.near = dist / 100;
         cam.far = dist * 100;
         cam.updateProjectionMatrix();
-        if (offsetYRatio !== 0) {
-          const offset = size * offsetYRatio;
-          tgt.position.y -= offset;
-        }
-      });
-
-      const ani = () => {
-        requestAnimationFrame(ani);
-        if (rotateZ) {
-          if (piv) piv.rotation.z -= 0.01;
-          else if (obj) obj.rotateOnWorldAxis(Z, -0.01);
-        }
-        ctl.update();
-        renderer.render(scene, cam);
-      };
-      ani();
-    }
-
-    viewer('viewer1', '6969 - Cloud.subsampled.ply', { rotateZ: true });
-    viewer('viewer2', 'cv3.splat', { scale: 1 }); // Deuxième viewer : modèle .splat
-    viewer('viewer3', '6969 - Cloud.subsampled.ply', {
-      rotateZ: true,
-      scale: 1.7,
-      offsetYRatio: 0.125,
-    });
-  </script>
-</body>
-</html>
+        if (offsetYRatio
