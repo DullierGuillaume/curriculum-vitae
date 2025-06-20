@@ -6,13 +6,21 @@
   <title>Mon CV 3D</title>
   <style>
     @font-face{font-family:'Rawest';src:url('assets/Rawest-SemiBold.otf') format('opentype');font-weight:600;font-style:normal}
-    body{margin:0;font-family:system-ui,sans-serif;background:url("assets/Projetcv_page-0001.jpg") center top/cover no-repeat}
+    body{margin:0;will-change:background-position;font-family:system-ui,sans-serif;background:url("assets/jojocv_page-0001.jpg") center top/cover no-repeat}
     #infos,h1,h2{font-family:'Rawest',system-ui,sans-serif}
     #infos{position:fixed;top:1rem;left:1rem;z-index:10;background:#ffffffcc;padding:.5rem 1rem;border-radius:.5rem}
     .viewer{width:100%;max-width:800px;height:500px;margin:120px auto 2rem;border:2px solid #ddd;border-radius:.75rem;box-shadow:0 4px 12px rgba(0,0,0,.1);background:#e5e7eb;overflow:hidden}
     .viewer.cvbox{height:auto;overflow:visible;background:rgba(255,255,255,.65);backdrop-filter:blur(2px)}
     @media(max-width:600px){#infos{left:50%;transform:translateX(-50%);top:.5rem;padding:.4rem .8rem;text-align:center}.viewer{height:60vw;margin:90px auto 1.5rem;border-width:1px}}
     .wa-btn img{height:2.2em;vertical-align:-0.2em;margin-left:.25em}
+    /* espace de fond pour desktop */
+    .spacer{display:none}
+    @media(min-width:601px){
+      .spacer{display:block;height:180vh} /* 100vh / 0.4 = 250vh to cover full parallax scroll */
+    }
+    }
+      
+    }}
   </style>
   <script type="importmap">
     {
@@ -24,10 +32,27 @@
   </script>
 </head>
 <body>
-  <div id="infos"><h1>Guillaume Dullier</h1><p>BIM Modeleur • Belleville‑en‑Beaujolais</p></div>
+  <div id="infos"><h1>Guillaume Dullier</h1><p>BIM Modeleur • Belleville‑en‑Beaujolais</p><p><a href="https://wa.me/33610262935" class="wa-btn" target="_blank" rel="noopener" aria-label="Appeler sur WhatsApp"><img src="https://img.icons8.com/color/24/000000/whatsapp.png" alt="WhatsApp"></a> 06 10 26 29 35 • ✉️ <a href="mailto:guillaumedullier@hotmail.fr">guillaumedullier@hotmail.fr</a></p></div>
   <div id="viewer1" class="viewer"></div>
   <div id="viewer2" class="viewer"></div>
   <div id="viewer3" class="viewer"></div>
+  <div id="frame-formations" class="viewer cvbox"><h2>Formations</h2><p><strong>2025</strong> – Titre professionnel <em>BIM Modeleur du Bâtiment</em> (Bac+2)</p><p><strong>2014</strong> – CAP Menuisier d’agencement</p></div>
+  <div id="frame-competences" class="viewer cvbox">
+      <h2>Compétences clés</h2>
+      <ul>
+        <li>Maîtrise intermédiaire&nbsp;: Revit, AutoCAD</li>
+        <li>Agencement intérieur, terminologie charpente bois</li>
+        <li>Curiosité, persévérance, rigueur&nbsp;&amp;&nbsp;précision</li>
+        <li>Notions&nbsp;: Python, électricité, plomberie</li>
+      </ul>
+    </div>
+    <div id="frame-langues" class="viewer cvbox">
+      <h2>Langues &amp; Permis</h2>
+      <p>Anglais (intermédiaire) • Allemand (débutant) • Permis B</p>
+      <h2>Centres d’intérêt</h2>
+      <p>Cyclisme de loisir, photogrammétrie, Gaussian Splatting</p>
+    </div>
+    <div id="frame-experiences" class="viewer cvbox"><h2>Expériences</h2><ul><li><strong>09/2024 – 12/2024</strong> : Appuis ponctuels – <em>Edouard de Vimal Architecte</em></li><li><strong>06/2022 – 05/2023</strong> : Charpentier – Alliance Bois Métal</li><li><strong>05/2021 – 02/2022</strong> : Agent de production – 21 Degrés Sud</li><li><strong>03/2017 – 03/2020</strong> : Menuisier cintreur – Formalis</li><li><strong>01/2016 – 12/2016</strong> : Réhabilitation – Particulier</li><li><strong>09/2015 – 11/2015</strong> : Pressage fermettes/ossature bois – COBA</li><li><strong>03/2015 – 08/2015</strong> : Menuisier – Société Santailer</li><li><strong>09/2014 – 11/2014</strong> : Stagiaire – Menuiserie Pourtaud Yohan</li></ul></div>
 
   <script type="module">
     import * as THREE from 'three';
@@ -37,6 +62,17 @@
     
 
     const Z = new THREE.Vector3(0,0,1);
+
+    // Parallax effect (desktop only)
+    const enableParallax=()=>{
+      if(window.innerWidth>600){
+        const factor=1.2; // vitesse du fond (plus rapide) // vitesse du fond
+        const onScroll=()=>{document.body.style.backgroundPositionY=-(window.scrollY*factor)+"px"};
+        window.addEventListener('scroll',onScroll,{passive:true});
+        onScroll();
+      }
+    };
+    enableParallax();
 
     function viewer(id,file,{rotateZ=false,scale=1,offsetYRatio=0}={}){
       const c=document.getElementById(id);
@@ -60,9 +96,12 @@
           const mat=new THREE.PointsMaterial({size:len*0.002,sizeAttenuation:true,vertexColors:hasCol,color:hasCol?undefined:0xffffff});
           obj=new THREE.Points(g,mat);piv=new THREE.Group();piv.add(obj);piv.rotation.x=-Math.PI/2;scene.add(piv);
         }else{obj=m;obj.traverse(n=>{if(n.isMesh&&!n.material)n.material=new THREE.MeshStandardMaterial({color:0xcccccc});});scene.add(obj);}
-        const tgt=piv||obj;if(scale!==1)tgt.scale.setScalar(scale);
-        const box=new THREE.Box3().setFromObject(tgt);const size=box.getSize(new THREE.Vector3()).length();const ctr=box.getCenter(new THREE.Vector3());
-        const dist=size/(2*Math.tan(cam.fov*Math.PI/360))*1.2;cam.position.set(0,0,dist).add(ctr);ctl.target.copy(ctr);ctl.update();cam.near=dist/100;cam.far=dist*100;cam.updateProjectionMatrix();
+        const tgt = piv || obj;
+        const box = new THREE.Box3().setFromObject(tgt);
+        const size = box.getSize(new THREE.Vector3()).length();
+        const ctr = box.getCenter(new THREE.Vector3());
+        if (scale !== 1) tgt.scale.setScalar(scale); // appliquer le zoom APRÈS avoir mesuré size
+        const dist = size / (2 * Math.tan((cam.fov * Math.PI) / 360)) * 1.2;cam.position.set(0,0,dist).add(ctr);ctl.target.copy(ctr);ctl.update();cam.near=dist/100;cam.far=dist*100;cam.updateProjectionMatrix();
         if(offsetYRatio!==0)tgt.position.y-=size*offsetYRatio;
       },undefined,err=>{console.error('Loader error',err);});
 
@@ -71,8 +110,9 @@
 
     viewer('viewer1','6969 - Cloud.subsampled.ply',{rotateZ:true});
     // viewer2 → iframe Supersplat complet
-    document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer3.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
-    viewer('viewer3','6969 - Cloud.subsampled.ply',{rotateZ:true,scale:1.7,offsetYRatio:0.125});
+    document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer7.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
+    viewer('viewer3','6969 - Cloud.subsampled.ply',{rotateZ:true,scale:1.8,offsetYRatio:0.125});
   </script>
+  <div class="spacer"></div>
 </body>
 </html>
