@@ -19,7 +19,7 @@
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js",
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/",
-        "supersplat-viewer": "https://cdn.jsdelivr.net/npm/supersplat-viewer@1.0.4/dist/supersplat-viewer.esm.js"
+        
       }
     }
   </script>
@@ -35,25 +35,14 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
-    import SuperSplatViewer from 'supersplat-viewer';
+    
 
     const Z = new THREE.Vector3(0,0,1);
 
     function viewer(id,file,{rotateZ=false,scale=1,offsetYRatio=0}={}){
       const c=document.getElementById(id);
 
-      // ----- SPLAT ------------------------------------------------------
-      if(file.endsWith('.splat')){
-        const url=/^https?:\/\//.test(file)?file:new URL(`assets/${file}`,import.meta.url).href;
-        const ss=new SuperSplatViewer({container:c,autoRotate:false});
-        ss.load(url).then(()=>{
-          const resize=()=>{ss.setSize(c.clientWidth,c.clientHeight);};
-          resize();window.addEventListener('resize',resize);
-          ss.start();
-        }).catch(e=>console.error('SuperSplat error',e));
-        return;
-      }
-      // ------------------------------------------------------------------
+      
 
       // ----- THREE + PLY/OBJ -------------------------------------------
       const scene=new THREE.Scene();scene.background=new THREE.Color(0xf6f6f9);
