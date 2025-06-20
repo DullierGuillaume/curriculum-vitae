@@ -62,19 +62,25 @@
           ? file
           : new URL(`assets/${file}`, import.meta.url).href;
 
+        // Initialise le viewer sans URL – on la charge après
         const ssViewer = new SuperSplatViewer({
           container: c,
-          url: splatUrl,
           autoRotate: false,
         });
 
-        const resize = () => {
-          const w = c.clientWidth;
-          const h = c.clientHeight;
-          ssViewer.setSize(w, h);
-        };
-        resize();
-        window.addEventListener('resize', resize);
+        // Charge explicitement le fichier puis redimensionne & démarre
+        ssViewer
+          .load(splatUrl)
+          .then(() => {
+            const resize = () => {
+              const w = c.clientWidth;
+              const h = c.clientHeight;
+              ssViewer.setSize(w, h);
+            };
+            resize();
+            window.addEventListener('resize', resize);
+          })
+          .catch((err) => console.error('SuperSplat load error:', err));
         return; // Pas de pipeline Three.js pour ce viewer
       }
       /* ------------------------------------------------------------------ */
