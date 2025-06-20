@@ -6,7 +6,7 @@
   <title>Mon CV 3D</title>
   <style>
     @font-face{font-family:'Rawest';src:url('assets/Rawest-SemiBold.otf') format('opentype');font-weight:600;font-style:normal}
-    body{margin:0;font-family:system-ui,sans-serif;background:url("assets/jojocv_page-0001.jpg") center top/cover no-repeat}
+    body{margin:0;will-change:background-position;font-family:system-ui,sans-serif;background:url("assets/jojocv_page-0001.jpg") center top/cover no-repeat}
     #infos,h1,h2{font-family:'Rawest',system-ui,sans-serif}
     #infos{position:fixed;top:1rem;left:1rem;z-index:10;background:#ffffffcc;padding:.5rem 1rem;border-radius:.5rem}
     .viewer{width:100%;max-width:800px;height:500px;margin:120px auto 2rem;border:2px solid #ddd;border-radius:.75rem;box-shadow:0 4px 12px rgba(0,0,0,.1);background:#e5e7eb;overflow:hidden}
@@ -16,7 +16,7 @@
     /* espace de fond pour desktop */
     .spacer{display:none}
     @media(min-width:601px){
-      .spacer{display:block;height:250vh} /* 100vh / 0.4 = 250vh to cover full parallax scroll */
+      .spacer{display:block;height:400vh} /* 100vh / 0.4 = 250vh to cover full parallax scroll */
     }
     }
       
@@ -66,7 +66,7 @@
     // Parallax effect (desktop only)
     const enableParallax=()=>{
       if(window.innerWidth>600){
-        const factor=0.4; // vitesse du fond
+        const factor=0.8; // vitesse du fond
         const onScroll=()=>{document.body.style.backgroundPositionY=-(window.scrollY*factor)+"px"};
         window.addEventListener('scroll',onScroll,{passive:true});
         onScroll();
