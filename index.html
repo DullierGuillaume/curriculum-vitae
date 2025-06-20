@@ -66,7 +66,7 @@
     // Parallax effect (desktop only)
     const enableParallax=()=>{
       if(window.innerWidth>600){
-        const factor=0.8; // vitesse du fond
+        const factor=1.2; // vitesse du fond (plus rapide) // vitesse du fond
         const onScroll=()=>{document.body.style.backgroundPositionY=-(window.scrollY*factor)+"px"};
         window.addEventListener('scroll',onScroll,{passive:true});
         onScroll();
