@@ -3,191 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mon CV 3D – Rotation Z continue du nuage</title>
+  <title>Mon CV 3D</title>
   <style>
-    /* ---- police perso Rawest ---- */
-    @font-face{
-      font-family:'Rawest';
-      src:url('assets/Rawest-SemiBold.otf') format('opentype');
-      font-weight:600;
-      font-style:normal;
-    }
-
-    body{margin:0;font-family:system-ui,sans-serif;background:url("assets/Projetcv_page-0001.jpg") center top/cover no-repeat;}
-
-    /* Nom & titres en Rawest */
-    #infos,h1,h2{font-family:'Rawest',system-ui,sans-serif;}
-
+    @font-face{font-family:'Rawest';src:url('assets/Rawest-SemiBold.otf') format('opentype');font-weight:600;font-style:normal}
+    body{margin:0;font-family:system-ui,sans-serif;background:url("assets/Projetcv_page-0001.jpg") center top/cover no-repeat}
+    #infos,h1,h2{font-family:'Rawest',system-ui,sans-serif}
     #infos{position:fixed;top:1rem;left:1rem;z-index:10;background:#ffffffcc;padding:.5rem 1rem;border-radius:.5rem}
     .viewer{width:100%;max-width:800px;height:500px;margin:120px auto 2rem;border:2px solid #ddd;border-radius:.75rem;box-shadow:0 4px 12px rgba(0,0,0,.1);background:#e5e7eb;overflow:hidden}
-    .viewer.cvbox{height:auto;overflow:visible;background:rgba(255,255,255,.65);backdrop-filter:blur(2px);}
-    @media(max-width:600px){#infos{left:50%;transform:translateX(-50%);top:.5rem;padding:.4rem .8rem;text-align:center;}.viewer{height:60vw;margin:90px auto 1.5rem;border-width:1px;}}
-
-    /* bouton WhatsApp */
-    .wa-btn img{height:2.2em;vertical-align:-0.2em;margin-left:.25em;}
+    .viewer.cvbox{height:auto;overflow:visible;background:rgba(255,255,255,.65);backdrop-filter:blur(2px)}
+    @media(max-width:600px){#infos{left:50%;transform:translateX(-50%);top:.5rem;padding:.4rem .8rem;text-align:center}.viewer{height:60vw;margin:90px auto 1.5rem;border-width:1px}}
+    .wa-btn img{height:2.2em;vertical-align:-0.2em;margin-left:.25em}
   </style>
   <script type="importmap">
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/",
-        "@splats/": "https://cdn.jsdelivr.net/npm/@mkkellogg/gaussian-splats-3d@0.4.7/build/"
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/"
       }
     }
   </script>
 </head>
 <body>
-  <div id="infos"><h1>Guillaume Dullier</h1><p>BIM Modeleur • 43 Rue de la République, 69220 Belleville-en-Beaujolais</p><p><a href="https://wa.me/33610262935" class="wa-btn" target="_blank" rel="noopener" aria-label="Appeler sur WhatsApp"><img src="https://img.icons8.com/color/24/000000/whatsapp.png" alt="WhatsApp"></a> 06 10 26 29 35 • ✉️ <a href="mailto:guillaumedullier@hotmail.fr">guillaumedullier@hotmail.fr</a></p></div>
-  <div id="viewer1" class="viewer"></div><div id="viewer2" class="viewer"></div><div id="viewer3" class="viewer"></div>
-  <div id="frame-formations" class="viewer cvbox"><h2>Formations</h2><p><strong>2025</strong> – Titre professionnel <em>BIM Modeleur du Bâtiment</em> (Bac+2)</p><p><strong>2014</strong> – CAP Menuisier d’agencement</p></div>
-  <div id="frame-experiences" class="viewer cvbox"><h2>Expériences</h2><ul><li><strong>09/2024 – 12/2024</strong> : Appuis ponctuels – <em>Edouard de Vimal Architecte</em></li><li><strong>06/2022 – 05/2023</strong> : Charpentier – Alliance Bois Métal</li><li><strong>05/2021 – 02/2022</strong> : Agent de production – 21 Degrés Sud</li><li><strong>03/2017 – 03/2020</strong> : Menuisier cintreur – Formalis</li><li><strong>01/2016 – 12/2016</strong> : Réhabilitation – Particulier</li><li><strong>09/2015 – 11/2015</strong> : Pressage fermettes/ossature bois – COBA</li><li><strong>03/2015 – 08/2015</strong> : Menuisier – Société Santailer</li><li><strong>09/2014 – 11/2014</strong> : Stagiaire – Menuiserie Pourtaud Yohan</li></ul></div>
-  <div id="frame-divers" class="viewer cvbox"><h2>Compétences clés</h2><ul><li>Maîtrise intermédiaire : Revit, AutoCAD</li><li>Agencement intérieur, terminologie charpente bois</li><li>Curiosité, persévérance, rigueur & précision</li><li>Notions : Python, électricité, plomberie</li></ul><h2>Langues & Permis</h2><p>Anglais (intermédiaire) • Allemand (débutant) • Permis B</p><h2>Centres d’intérêt</h2><p>Cyclisme de loisir, photogrammétrie, Gaussian Splatting</p></div>
+  <div id="infos"><h1>Guillaume Dullier</h1><p>BIM Modeleur • Belleville‑en‑Beaujolais</p></div>
+  <div id="viewer1" class="viewer"></div>
+  <div id="viewer2" class="viewer"></div>
+  <div id="viewer3" class="viewer"></div>
+
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
-    import * as GaussianSplats3D from '@splats/gaussian-splats-3d.module.js';
+    
 
-    const Z = new THREE.Vector3(0, 0, 1);
+    const Z = new THREE.Vector3(0,0,1);
 
-    function viewer(id, file, { rotateZ = false, scale = 1, offsetYRatio = 0 } = {}) {
-      const c = document.getElementById(id);
+    function viewer(id,file,{rotateZ=false,scale=1,offsetYRatio=0}={}){
+      const c=document.getElementById(id);
 
-      /* ------------------------------------------------------------------
-         Affichage .splat via Viewer « tout‑en‑un » (plus fiable)
-         ------------------------------------------------------------------ */
-      if (file.endsWith('.splat')) {
-        const splatUrl = /^https?:\/\//.test(file)
-          ? file
-          : new URL(`assets/${file}`, import.meta.url).href;
-
-        // Crée un viewer autosuffisant (canvas, caméra, controls, loop)
-        const gsViewer = new GaussianSplats3D.Viewer({
-          sharedMemoryForWorkers: false, // force le fallback sans SharedArrayBuffer
-          showLoadingUI: true,
-        });
-
-        gsViewer
-          .addSplatScene(splatUrl, {
-            scale: [scale, scale, scale],
-          })
-          .then(() => {
-            gsViewer.start();
-            // Place son canvas dans notre conteneur
-            c.appendChild(gsViewer.renderer.domElement);
-            // Ajuste la taille en même temps que la div
-            const resize = () => {
-              const w = c.clientWidth;
-              const h = c.clientHeight;
-              gsViewer.renderer.setSize(w, h);
-              gsViewer.camera.aspect = w / h;
-              gsViewer.camera.updateProjectionMatrix();
-            };
-            resize();
-            window.addEventListener('resize', resize);
-          })
-          .catch((err) => console.error('Échec du chargement du .splat :', err));
-        return; // on quitte : pas besoin de notre pipeline Three.js
-      }
       
 
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xf6f6f9);
+      // ----- THREE + PLY/OBJ -------------------------------------------
+      const scene=new THREE.Scene();scene.background=new THREE.Color(0xf6f6f9);
+      const cam=new THREE.PerspectiveCamera(45,1,0.1,1000);cam.position.set(0,1,5);
+      const renderer=new THREE.WebGLRenderer({antialias:true});c.appendChild(renderer.domElement);
+      const ctl=new OrbitControls(cam,renderer.domElement);ctl.enableDamping=true;
+      scene.add(new THREE.AmbientLight(0xffffff,0.6));const dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(2,4,2);scene.add(dl);
+      const rez=()=>{const w=c.clientWidth,h=c.clientHeight;cam.aspect=w/h;cam.updateProjectionMatrix();renderer.setSize(w,h);};rez();window.addEventListener('resize',rez);
 
-      const cam = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-      cam.position.set(0, 1, 5);
+      const loader=file.endsWith('.ply')?new PLYLoader():new OBJLoader();loader.setPath('assets/');
+      let piv=null,obj=null;
+      loader.load(file,(m)=>{
+        if(file.endsWith('.ply')){
+          const g=m;g.computeBoundingBox();const hasCol=g.hasAttribute('color');
+          const len=g.boundingBox.getSize(new THREE.Vector3()).length();
+          const mat=new THREE.PointsMaterial({size:len*0.002,sizeAttenuation:true,vertexColors:hasCol,color:hasCol?undefined:0xffffff});
+          obj=new THREE.Points(g,mat);piv=new THREE.Group();piv.add(obj);piv.rotation.x=-Math.PI/2;scene.add(piv);
+        }else{obj=m;obj.traverse(n=>{if(n.isMesh&&!n.material)n.material=new THREE.MeshStandardMaterial({color:0xcccccc});});scene.add(obj);}
+        const tgt=piv||obj;if(scale!==1)tgt.scale.setScalar(scale);
+        const box=new THREE.Box3().setFromObject(tgt);const size=box.getSize(new THREE.Vector3()).length();const ctr=box.getCenter(new THREE.Vector3());
+        const dist=size/(2*Math.tan(cam.fov*Math.PI/360))*1.2;cam.position.set(0,0,dist).add(ctr);ctl.target.copy(ctr);ctl.update();cam.near=dist/100;cam.far=dist*100;cam.updateProjectionMatrix();
+        if(offsetYRatio!==0)tgt.position.y-=size*offsetYRatio;
+      },undefined,err=>{console.error('Loader error',err);});
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true });
-      c.appendChild(renderer.domElement);
-
-      const ctl = new OrbitControls(cam, renderer.domElement);
-      ctl.enableDamping = true;
-
-      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-      const dl = new THREE.DirectionalLight(0xffffff, 0.6);
-      dl.position.set(2, 4, 2);
-      scene.add(dl);
-
-      const rez = () => {
-        const w = c.clientWidth,
-          h = c.clientHeight;
-        cam.aspect = w / h;
-        cam.updateProjectionMatrix();
-        renderer.setSize(w, h);
-      };
-      rez();
-      window.addEventListener('resize', rez);
-
-      const loader = file.endsWith('.ply') ? new PLYLoader() : new OBJLoader();
-      loader.setPath('assets/');
-
-      let piv = null,
-        obj = null;
-      loader.load(file, (m) => {
-        if (file.endsWith('.ply')) {
-          const g = m;
-          g.computeBoundingBox();
-          const hasColors = g.hasAttribute('color');
-          const len = g.boundingBox.getSize(new THREE.Vector3()).length();
-          const matParams = {
-            size: len * 0.002,
-            sizeAttenuation: true,
-            vertexColors: hasColors,
-          };
-          if (!hasColors) matParams.color = 0xffffff;
-          const mat = new THREE.PointsMaterial(matParams);
-          obj = new THREE.Points(g, mat);
-          piv = new THREE.Group();
-          piv.add(obj);
-          piv.rotation.x = -Math.PI / 2;
-          scene.add(piv);
-        } else {
-          obj = m;
-          obj.traverse((n) => {
-            if (n.isMesh && !n.material) {
-              n.material = new THREE.MeshStandardMaterial({ color: 0xcccccc });
-            }
-          });
-          scene.add(obj);
-        }
-        const tgt = piv || obj;
-        if (scale !== 1) tgt.scale.setScalar(scale);
-        const box = new THREE.Box3().setFromObject(tgt);
-        const size = box.getSize(new THREE.Vector3()).length();
-        const ctr = box.getCenter(new THREE.Vector3());
-        const dist = (size / (2 * Math.tan((cam.fov * Math.PI) / 360))) * 1.2;
-        cam.position.set(0, 0, dist).add(ctr);
-        ctl.target.copy(ctr);
-        ctl.update();
-        cam.near = dist / 100;
-        cam.far = dist * 100;
-        cam.updateProjectionMatrix();
-        if (offsetYRatio !== 0) {
-          const offset = size * offsetYRatio;
-          tgt.position.y -= offset;
-        }
-      });
-
-      const ani = () => {
-        requestAnimationFrame(ani);
-        if (rotateZ) {
-          if (piv) piv.rotation.z -= 0.01;
-          else if (obj) obj.rotateOnWorldAxis(Z, -0.01);
-        }
-        ctl.update();
-        renderer.render(scene, cam);
-      };
-      ani();
+      const ani=()=>{requestAnimationFrame(ani);if(rotateZ){if(piv)piv.rotation.z-=0.01;else if(obj)obj.rotateOnWorldAxis(Z,-0.01);}ctl.update();renderer.render(scene,cam);} ;ani();
     }
 
-    viewer('viewer1', '6969 - Cloud.subsampled.ply', { rotateZ: true });
-    viewer('viewer2', 'cv2.splat', { scale: 1 }); // Deuxième viewer : modèle .splat
-    viewer('viewer3', '6969 - Cloud.subsampled.ply', {
-      rotateZ: true,
-      scale: 1.7,
-      offsetYRatio: 0.125,
-    });
+    viewer('viewer1','6969 - Cloud.subsampled.ply',{rotateZ:true});
+    // viewer2 → iframe Supersplat complet
+    document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer3.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
+    viewer('viewer3','6969 - Cloud.subsampled.ply',{rotateZ:true,scale:1.7,offsetYRatio:0.125});
   </script>
 </body>
 </html>
