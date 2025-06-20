@@ -30,12 +30,11 @@
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/"
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/",
+        "supersplat-viewer": "https://cdn.jsdelivr.net/npm/supersplat-viewer@1.0.4/dist/supersplat-viewer.esm.js"
       }
     }
   </script>
-  <!-- SuperSplat viewer UMD global (SuperSplatViewer) -->
-  <script src="https://unpkg.com/supersplat-viewer@latest/dist/supersplat-viewer.min.js"></script>
 </head>
 <body>
   <div id="infos"><h1>Guillaume Dullier</h1><p>BIM Modeleur • 43 Rue de la République, 69220 Belleville-en-Beaujolais</p><p><a href="https://wa.me/33610262935" class="wa-btn" target="_blank" rel="noopener" aria-label="Appeler sur WhatsApp"><img src="https://img.icons8.com/color/24/000000/whatsapp.png" alt="WhatsApp"></a> 06 10 26 29 35 • ✉️ <a href="mailto:guillaumedullier@hotmail.fr">guillaumedullier@hotmail.fr</a></p></div>
@@ -48,6 +47,7 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
+    import SuperSplatViewer from 'supersplat-viewer';
 
     const Z = new THREE.Vector3(0, 0, 1);
 
@@ -55,21 +55,19 @@
       const c = document.getElementById(id);
 
       /* ------------------------------------------------------------------
-         Cas .splat — affichage via SuperSplatViewer
+         Cas .splat — affichage via SuperSplatViewer (ESM)
          ------------------------------------------------------------------ */
       if (file.endsWith('.splat')) {
         const splatUrl = /^https?:\/\//.test(file)
           ? file
           : new URL(`assets/${file}`, import.meta.url).href;
 
-        // Crée un SuperSplatViewer dans le conteneur
-        const ssViewer = new window.SuperSplatViewer({
+        const ssViewer = new SuperSplatViewer({
           container: c,
           url: splatUrl,
           autoRotate: false,
         });
 
-        // Ajuster la taille au redimensionnement
         const resize = () => {
           const w = c.clientWidth;
           const h = c.clientHeight;
@@ -77,7 +75,7 @@
         };
         resize();
         window.addEventListener('resize', resize);
-        return; // Pas de pipeline Three.js nécessaire
+        return; // Pas de pipeline Three.js pour ce viewer
       }
       /* ------------------------------------------------------------------ */
 
@@ -126,30 +124,4 @@
           };
           if (!hasColors) matParams.color = 0xffffff;
           const mat = new THREE.PointsMaterial(matParams);
-          obj = new THREE.Points(g, mat);
-          piv = new THREE.Group();
-          piv.add(obj);
-          piv.rotation.x = -Math.PI / 2;
-          scene.add(piv);
-        } else {
-          obj = m;
-          obj.traverse((n) => {
-            if (n.isMesh && !n.material) {
-              n.material = new THREE.MeshStandardMaterial({ color: 0xcccccc });
-            }
-          });
-          scene.add(obj);
-        }
-        const tgt = piv || obj;
-        if (scale !== 1) tgt.scale.setScalar(scale);
-        const box = new THREE.Box3().setFromObject(tgt);
-        const size = box.getSize(new THREE.Vector3()).length();
-        const ctr = box.getCenter(new THREE.Vector3());
-        const dist = (size / (2 * Math.tan((cam.fov * Math.PI) / 360))) * 1.2;
-        cam.position.set(0, 0, dist).add(ctr);
-        ctl.target.copy(ctr);
-        ctl.update();
-        cam.near = dist / 100;
-        cam.far = dist * 100;
-        cam.updateProjectionMatrix();
-        if (offsetYRatio
+          obj = new THREE.Points
