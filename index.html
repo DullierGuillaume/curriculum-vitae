@@ -17,7 +17,8 @@
     .spacer{display:none}
     @media(min-width:601px){
       .spacer{display:block;height:100vh}
-      body{background-attachment:fixed}
+    }
+      
     }}
   </style>
   <script type="importmap">
@@ -60,6 +61,17 @@
     
 
     const Z = new THREE.Vector3(0,0,1);
+
+    // Parallax effect (desktop only)
+    const enableParallax=()=>{
+      if(window.innerWidth>600){
+        const factor=0.4; // vitesse du fond
+        const onScroll=()=>{document.body.style.backgroundPositionY=-(window.scrollY*factor)+"px"};
+        window.addEventListener('scroll',onScroll,{passive:true});
+        onScroll();
+      }
+    };
+    enableParallax();
 
     function viewer(id,file,{rotateZ=false,scale=1,offsetYRatio=0}={}){
       const c=document.getElementById(id);
