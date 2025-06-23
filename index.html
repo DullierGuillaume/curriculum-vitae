@@ -10,7 +10,10 @@
     #infos,h1,h2{font-family:'Rawest',system-ui,sans-serif}
     #infos{position:fixed;top:1rem;left:1rem;z-index:10;background:#ffffffcc;padding:.5rem 1rem;border-radius:.5rem}
     .viewer{box-sizing:border-box;width:100%;max-width:800px;height:500px;margin:120px auto 2rem;border:2px solid #ddd;border-radius:.75rem;box-shadow:0 4px 12px rgba(0,0,0,.1);background:#e5e7eb;overflow:hidden}
-    .viewer.cvbox{box-sizing:border-box;height:auto;overflow:visible;background:rgba(255,255,255,0.65);backdrop-filter:blur(2px);padding:1rem; margin:1rem auto;}
+    .viewer.cvbox{box-sizing:border-box;height:auto;overflow:visible;background:rgba(255,255,255,0.65);backdrop-filter:blur(2px);padding:1rem;margin:1rem auto;}
+    /* Bar chart for competencies */
+    .bar-chart{width:100%;height:0.75rem;background:#e0e0e0;border-radius:0.375rem;overflow:hidden;margin-top:0.5rem;}
+    .bar-chart .bar{height:100%;background:#333;width:0;} /* default, override inline */
     /* Bar chart for competencies */
     .bar-chart{width:100%;height:0.75rem;background:#e0e0e0;border-radius:0.375rem;overflow:hidden;margin-top:0.5rem;}
     .bar-chart .bar{height:100%;background:#333;width:0;} /* default, override inline */
@@ -145,4 +148,3 @@
   <div class="spacer"></div>
 </body>
 </html>
-
