@@ -17,9 +17,14 @@
       display: flex;
       align-items: center;
     }
+    /* skill name fixed width */
+    .skill-name {
+      flex: 0 0 150px;
+      font-weight: 500;
+    }
     /* Bar chart for competencies */
     .bar-chart{
-      flex: 1;               /* take remaining space */
+      flex: 1;
       height:0.75rem;
       background:#e0e0e0;
       border-radius:0.375rem;
@@ -32,34 +37,7 @@
       width:0; /* override inline width */
     }
 
-    /* Bar chart for competencies */
-    .bar-chart{
-      display:inline-block;
-      width:40%;
-      height:0.75rem;
-      background:#e0e0e0;
-      border-radius:0.375rem;
-      overflow:hidden;
-      margin:0 0 0 0.5rem;
-      vertical-align:middle;
-    }
-    .bar-chart .bar{
-      height:100%;
-      background:#333;
-      width:0; /* override inline width */
-    }
-    @media(min-width:601px){
-      .viewer{margin:120px auto 4rem;} 
-      .viewer.cvbox{margin:2rem auto 3rem;}
-    }
-    @media(max-width:600px){
-      #infos{left:50%;transform:translateX(-50%);top:.5rem;padding:.4rem .8rem;text-align:center}
-      body{padding-top:50vw}
-      .viewer{height:50vw;margin:90px auto 1.5rem;border-width:1px}
-      #viewer1{display:none}
-    }
-    .wa-btn img{height:2.2em;vertical-align:-0.2em;margin-left:.25em}
-    .spacer{display:none}
+    .spacer{display:none}{display:none}
     @media(min-width:601px){
       .spacer{display:block;height:180vh}
     }
