@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mon CV 3D</title>
+  <title>CV Guillaume Dullier</title>
   <style>
     @font-face{font-family:'Rawest';src:url('assets/Rawest-SemiBold.otf') format('opentype');font-weight:600;font-style:normal}
     body{margin:0;will-change:background-position;font-family:system-ui,sans-serif;background:url("assets/jojocv_page-0001.jpg") center top/cover no-repeat}
@@ -11,167 +11,139 @@
     #infos{position:fixed;top:1rem;left:1rem;z-index:10;background:#ffffffcc;padding:.5rem 1rem;border-radius:.5rem}
     .viewer{box-sizing:border-box;width:100%;max-width:800px;height:500px;margin:120px auto 2rem;border:2px solid #ddd;border-radius:.75rem;box-shadow:0 4px 12px rgba(0,0,0,.1);background:#e5e7eb;overflow:hidden}
     .viewer.cvbox{box-sizing:border-box;height:auto;overflow:visible;background:rgba(255,255,255,0.65);backdrop-filter:blur(2px);padding:1rem;margin:1rem auto;}
-    /* Bar charts in Competencies */
-    .viewer.cvbox ul { list-style:none; padding:0; margin:0; }
-    .viewer.cvbox ul li { display:flex; align-items:center; margin-bottom:0.5rem; }
-    .skill-name { flex:0 0 150px; font-weight:500; }
-    .bar-chart { flex:1; height:0.75rem; background:#e0e0e0; border-radius:0.375rem; overflow:hidden; margin-left:1rem; }
-    .bar-chart .bar { height:100%; background:#333; width:0; }
-    /* Align competencies bars */
-    .viewer.cvbox ul { list-style:none; padding:0; }
-    .viewer.cvbox ul li {
-      display: flex;
-      align-items: center;
+    @media(min-width:601px){
+      .viewer{margin:120px auto 4rem;} 
+      .viewer.cvbox{margin:2rem auto 3rem;}
     }
-    /* skill name fixed width */
-    .skill-name {
-      flex: 0 0 150px;
-      font-weight: 500;
+    @media(max-width:600px){
+      #infos{left:50%;transform:translateX(-50%);top:.5rem;padding:.4rem .8rem;text-align:center}
+      body{padding-top:50vw}
+      .viewer{height:50vw;margin:90px auto 1.5rem;border-width:1px}
+      #viewer1{display:none}
     }
-    /* Bar chart for competencies */
-    .bar-chart{
-      flex: 1;
-      height:0.75rem;
-      background:#e0e0e0;
-      border-radius:0.375rem;
-      overflow:hidden;
-      margin-left:1rem;
-    }
-    .bar-chart .bar{
-      height:100%;
-      background:#333;
-      width:0; /* override inline width */
+    .wa-btn img{height:2.2em;vertical-align:-0.2em;margin-left:.25em}
+    /* espace de fond pour desktop */
+    .spacer{display:none}
+    @media(min-width:601px){
+      .spacer{display:block;height:180vh} /* 100vh / 0.4 = 180vh to cover full parallax scroll */
     }
 
-    .spacer{display:none}{display:none}
-    @media(min-width:601px){
-      .spacer{display:block;height:180vh}
-    }
+    /* Styles pour la section Expériences */
+    #frame-experiences ul{list-style:none;margin:0;padding:0}
+    #frame-experiences li{display:grid;grid-template-columns:120px 1fr;column-gap:10px;margin-bottom:.5em}
+    #frame-experiences .date{text-align:left;font-family:monospace}
+    #frame-experiences .job{text-align:justify;}
   </style>
   <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/"
-      }
-    }
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/"}}
   </script>
 </head>
 <body>
-  <div id="infos"><h1>Guillaume Dullier</h1><p>BIM Modeleur • Belleville‑en‑Beaujolais</p><p><a href="https://wa.me/33610262935" class="wa-btn" target="_blank" rel="noopener" aria-label="Appeler sur WhatsApp"><img src="https://img.icons8.com/color/24/000000/whatsapp.png" alt="WhatsApp"></a> 06 10 26 29 35 • ✉️ <a href="mailto:guillaumedullier@hotmail.fr">guillaumedullier@hotmail.fr</a></p></div>
+  <div id="infos"><h1>Guillaume Dullier</h1>
+    <p>BIM Modeleur • Belleville‑en‑Beaujolais</p>
+    <p> 41 ans</p>
+    <p><a href="https://wa.me/33610262935" class="wa-btn" target="_blank" rel="noopener" aria-label="Appeler sur WhatsApp"><img src="https://img.icons8.com/color/24/000000/whatsapp.png" alt="WhatsApp"></a> 06 10 26 29 35 •</p> 
+    <p>✉️ <a href="mailto:guillaumedullier@hotmail.fr">guillaumedullier@hotmail.fr</a></p></div>
   <div id="viewer1" class="viewer"></div>
   <div id="viewer2" class="viewer"></div>
   <div id="viewer3" class="viewer"></div>
   <div id="frame-formations" class="viewer cvbox"><h2>Formations</h2><p><strong>2025</strong> – Titre professionnel <em>BIM Modeleur du Bâtiment</em> (Bac+2)</p><p><strong>2014</strong> – CAP Menuisier d’agencement</p></div>
   <div id="frame-competences" class="viewer cvbox">
-      <h2>Compétences clés</h2>
+      <h2>Compétences</h2>
       <ul>
-        <li>Revit
-          <div class="bar-chart"><div class="bar" style="width:100%"></div></div>
-        </li>
-        <li>AutoCAD
-          <div class="bar-chart"><div class="bar" style="width:60%"></div></div>
-        </li>
-        <li>Vectorworks
-          <div class="bar-chart"><div class="bar" style="width:60%"></div></div>
-        </li>
-        <li>Recap
-          <div class="bar-chart"><div class="bar" style="width:60%"></div></div>
-        </li>
-        <li>Blender
-          <div class="bar-chart"><div class="bar" style="width:60%"></div></div>
-        </li>
-        <li>Metashape
-          <div class="bar-chart"><div class="bar" style="width:100%"></div></div>
-        </li>
-        <li>Reality Capture
-          <div class="bar-chart"><div class="bar" style="width:60%"></div></div>
-        </li>
-        <li>PostShot
-          <div class="bar-chart"><div class="bar" style="width:80%"></div></div>
-        </li>
-        <li>Illustrator
-          <div class="bar-chart"><div class="bar" style="width:60%"></div></div>
-        </li>
+        <li>Revit           <span class="stars">★★★</span></li>
+        <li>AutoCAD         <span class="stars">★☆☆</span></li>
+        <li>Vectorworks     <span class="stars">★☆☆</span></li>
+        <li>Recap           <span class="stars">★☆☆</span></li>
+        <li>Blender         <span class="stars">★☆☆</span></li>
+        <li>Metashape       <span class="stars">★★★</span></li>
+        <li>Reality Capture <span class="stars">★☆☆</span></li>
+        <li>PostShot        <span class="stars">★★☆</span></li>
+        <li>Suite Adobe     <span class="stars">★☆☆</span></li>
       </ul>
     </div>
     <div id="frame-langues" class="viewer cvbox">
       <h2>Langues &amp; Permis</h2>
-      <p>Anglais (intermédiaire) • Allemand (débutant) • Permis B</p>
+      <p> •Anglais – compréhension écrite avancée : Lecture au quotidien de contenus variés : documentations techniques, tutoriels, rapports open source et papiers de recherche.</p>
+      <p> •Permis B</p>
       <h2>Centres d’intérêt</h2>
-      <p>Cyclisme de loisir, photogrammétrie, Gaussian Splatting</p>
+      <p> Photogrammétrie, Gaussian Splatting, Edge detection, Cyclisme de loisir, </p>
     </div>
-    <div id="frame-experiences" class="viewer cvbox"><h2>Expériences</h2><ul><li><strong>09/2024 – 12/2024</strong> : Appuis ponctuels – <em>Edouard de Vimal Architecte</em></li><li><strong>06/2022 – 05/2023</strong> : Charpentier – Alliance Bois Métal</li><li><strong>05/2021 – 02/2022</strong> : Agent de production – 21 Degrés Sud</li><li><strong>03/2017 – 03/2020</strong> : Menuisier cintreur – Formalis</li><li><strong>01/2016 – 12/2016</strong> : Réhabilitation – Particulier</li><li><strong>09/2015 – 11/2015</strong> : Pressage fermettes/ossature bois – COBA</li><li><strong>03/2015 – 08/2015</strong> : Menuisier – Société Santailer</li><li><strong>09/2014 – 11/2014</strong> : Stagiaire – Menuiserie Pourtaud Yohan</li><li><strong>2013</strong> : Technicien – Alex Cobas, designer, artiste (42)</li><li><strong>2011 – 2012</strong> : Intérimaire – Affaires à suivre, événementiel</li><li><strong>2009 – 2010</strong> : Facteur d’équipe – La Poste</li><li><strong>2008 – 2009</strong> : Opérateur de saisie – Police Technique et Scientifique</li></ul></div>
+    <div id="frame-experiences" class="viewer cvbox"><h2>Expériences</h2><ul>
+      <li><span class="date">09/2024   12/2024 </span><span class="job"><strong>Appuis ponctuels – <em>Edouard de Vimal Architecte</em></strong></span></li>
+      <li><span class="date">06/2022   05/2023 </span><span class="job"><strong>Charpentier – <em>Alliance Bois Métal</em></strong></span></li>
+      <li><span class="date">05/2021   02/2022 </span><span class="job"><strong>Agent de production – <em>21 Degrés Sud</em></strong></span></li>
+      <li><span class="date">03/2017   03/2020 </span><span class="job"><strong>Menuisier cintreur – <em>Formalis</em></strong></span></li>
+      <li><span class="date">01/2016   12/2016 </span><span class="job"><strong>Réhabilitation – <em>Particulier</em></strong></span></li>
+      <li><span class="date">09/2015   11/2015 </span><span class="job"><strong>Pressage fermettes/ossature bois – <em>COBA</em></strong></span></li>
+      <li><span class="date">03/2015   08/2015 </span><span class="job"><strong>Menuisier – <em>Société Santailer</em></strong></span></li>
+      <li><span class="date">09/2014   11/2014 </span><span class="job"><strong>Stagiaire – <em>Menuiserie Pourtaud Yohan</em></strong></span></li>
+      <li><span class="date">2013 </span><span class="job"><strong>Technicien – <em>Alex Cobas, designer, artiste(42)</em></strong></span></li>
+      <li><span class="date">2011 2012 </span><span class="job"><strong>Interimaire – <em>Affaires à suivre, événementiel.</em></strong></span></li>
+      <li><span class="date">2009 2010 </span><span class="job"><strong>Facteur d’équipe – <em>La Poste</em></strong></span></li>
+      <li><span class="date">2008 2009 </span><span class="job"><strong>Opérateur de saisie – <em>Police Technique et scientifique</em></strong></span></li>
+    </ul></div>
 
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
-    
     const Z = new THREE.Vector3(0,0,1);
-
     // Parallax effect (desktop only)
-    const enableParallax=()=>{
-      if(window.innerWidth>600){
-        const factor=1.2; // vitesse du fond (plus rapide)
-        const onScroll=()=>{document.body.style.backgroundPositionY=-(window.scrollY*factor)+"px"};
-        window.addEventListener('scroll',onScroll,{passive:true});
+    const enableParallax = () => {
+      if (window.innerWidth > 600) {
+        const factor = 1.2;
+        const onScroll = () => { document.body.style.backgroundPositionY = -(window.scrollY * factor) + "px"; };
+        window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
       }
     };
     enableParallax();
 
-    function viewer(id,file,{rotateZ=false,scale=1,offsetYRatio=0}={}){
-      const c=document.getElementById(id);
-
-      // ----- THREE + PLY/OBJ -------------------------------------------
-      const scene=new THREE.Scene();scene.background=new THREE.Color(0xf6f6f9);
-      const cam=new THREE.PerspectiveCamera(45,1,0.1,1000);cam.position.set(0,1,5);
-      const renderer=new THREE.WebGLRenderer({antialias:true});c.appendChild(renderer.domElement);
-      const ctl=new OrbitControls(cam,renderer.domElement);ctl.enableDamping=true;
-      scene.add(new THREE.AmbientLight(0xffffff,0.6));const dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(2,4,2);scene.add(dl);
-      const rez=()=>{const w=c.clientWidth,h=c.clientHeight;cam.aspect=w/h;cam.updateProjectionMatrix();renderer.setSize(w,h);};rez();window.addEventListener('resize',rez);
-
-      const loader=file.endsWith('.ply')?new PLYLoader():new OBJLoader();loader.setPath('assets/');
-      let piv=null,obj=null;
-      loader.load(file,(m)=>{
-        if(file.endsWith('.ply')){
-          const g=m;g.computeBoundingBox();const hasCol=g.hasAttribute('color');
-          const len=g.boundingBox.getSize(new THREE.Vector3()).length();
-          const mat=new THREE.PointsMaterial({size:len*0.002,sizeAttenuation:true,vertexColors:hasCol,color:hasCol?undefined:0xffffff});
-          obj=new THREE.Points(g,mat);piv=new THREE.Group();piv.add(obj);piv.rotation.x=-Math.PI/2;scene.add(piv);
-        }else{obj=m;obj.traverse(n=>{if(n.isMesh&&!n.material)n.material=new THREE.MeshStandardMaterial({color:0xcccccc});});scene.add(obj);}
-        const tgt=piv||obj;
-        const box=new THREE.Box3().setFromObject(tgt);
-        const size=box.getSize(new THREE.Vector3()).length();
-        const ctr=box.getCenter(new THREE.Vector3());
-        if(scale!==1) tgt.scale.setScalar(scale);
-        const dist=size/(2*Math.tan((cam.fov*Math.PI)/360))*1.2;
-        cam.position.set(0,0,dist).add(ctr);
-        ctl.target.copy(ctr);
-        ctl.update();
-        cam.near=dist/100;
-        cam.far=dist*100;
-        cam.updateProjectionMatrix();
-        if(offsetYRatio!==0) tgt.position.y-=size*offsetYRatio;
-      },undefined,err=>console.error('Loader error',err));
-
-      const ani=()=>{requestAnimationFrame(ani);
-        if(rotateZ){
-          if(piv) piv.rotation.z-=0.01;
-          else if(obj) obj.rotateOnWorldAxis(Z,-0.01);
+    function viewer(id, file, { rotateZ = false, scale = 1, offsetYRatio = 0 } = {}) {
+      const c = document.getElementById(id);
+      const scene = new THREE.Scene(); scene.background = new THREE.Color(0xf6f6f9);
+      const cam = new THREE.PerspectiveCamera(45, 1, 0.1, 1000); cam.position.set(0, 1, 5);
+      const renderer = new THREE.WebGLRenderer({ antialias: true }); c.appendChild(renderer.domElement);
+      const ctl = new OrbitControls(cam, renderer.domElement); ctl.enableDamping = true;
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+      const dl = new THREE.DirectionalLight(0xffffff, 0.6); dl.position.set(2, 4, 2); scene.add(dl);
+      const rez = () => { const w = c.clientWidth, h = c.clientHeight; cam.aspect = w / h; cam.updateProjectionMatrix(); renderer.setSize(w, h); };
+      rez(); window.addEventListener('resize', rez);
+      const loader = file.endsWith('.ply') ? new PLYLoader() : new OBJLoader();
+      loader.setPath('assets/');
+      let piv = null, obj = null;
+      loader.load(file, (m) => {
+        if (file.endsWith('.ply')) {
+          const g = m; g.computeBoundingBox();
+          const hasCol = g.hasAttribute('color');
+          const len = g.boundingBox.getSize(new THREE.Vector3()).length();
+          const mat = new THREE.PointsMaterial({ size: len * 0.002, sizeAttenuation: true, vertexColors: hasCol, color: hasCol ? undefined : 0xffffff });
+          obj = new THREE.Points(g, mat); piv = new THREE.Group(); piv.add(obj); piv.rotation.x = -Math.PI / 2; scene.add(piv);
+        } else {
+          obj = m; obj.traverse(n => { if (n.isMesh && !n.material) n.material = new THREE.MeshStandardMaterial({ color: 0xcccccc }); });
+          scene.add(obj);
         }
-        ctl.update();renderer.render(scene,cam);
-      };
+        const tgt = piv || obj;
+        const box = new THREE.Box3().setFromObject(tgt);
+        const size = box.getSize(new THREE.Vector3()).length();
+        const ctr = box.getCenter(new THREE.Vector3());
+        if (scale !== 1) tgt.scale.setScalar(scale);
+        const dist = size / (2 * Math.tan((cam.fov * Math.PI) / 360)) * 1.2;
+        cam.position.set(0, 0, dist).add(ctr);
+        ctl.target.copy(ctr); ctl.update(); cam.near = dist / 100; cam.far = dist * 100; cam.updateProjectionMatrix();
+        if (offsetYRatio) tgt.position.y -= size * offsetYRatio;
+      }, undefined, err => { console.error('Loader error', err); });
+      const ani = () => { requestAnimationFrame(ani); if (rotateZ) { if (piv) piv.rotation.z -= 0.01; else if (obj) obj.rotateOnWorldAxis(Z, -0.01); } ctl.update(); renderer.render(scene, cam); };
       ani();
     }
 
-    viewer('viewer1','6969 - Cloud.subsampled.ply',{rotateZ:true});
-    // viewer2 → iframe Supersplat complet
-    document.getElementById('viewer2').innerHTML='<iframe src="assets/cv-viewer9.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
-    viewer('viewer3','6969 - Cloud.subsampled.ply',{rotateZ:true,scale:1.8,offsetYRatio:0.125});
+    viewer('viewer1', '6969 - Cloud.subsampled.ply', { rotateZ: true });
+    document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer9.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
+    viewer('viewer3', '6969 - Cloud.subsampled.ply', { rotateZ: true, scale: 1.8, offsetYRatio: 0.125 });
   </script>
   <div class="spacer"></div>
 </body>
 </html>
+
