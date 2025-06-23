@@ -1,5 +1,3 @@
-
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -43,7 +41,7 @@
       margin-bottom: 0.5em;
     }
     #frame-experiences .date {
-      text-align: right;
+      text-align: left; /* Alignement à gauche */
       font-family: monospace;
     }
     #frame-experiences .job {
@@ -67,7 +65,7 @@
       <a href="https://wa.me/33610262935" class="wa-btn" target="_blank" rel="noopener" aria-label="Appeler sur WhatsApp">
         <img src="https://img.icons8.com/color/24/000000/whatsapp.png" alt="WhatsApp">
       </a>
-      06 10 26 29 35 •
+      06 10 26 29 35 •
     </p>
     <p>✉️ <a href="mailto:guillaumedullier@hotmail.fr">guillaumedullier@hotmail.fr</a></p>
   </div>
@@ -194,35 +192,4 @@
           const g=m; g.computeBoundingBox();
           const hasCol=g.hasAttribute('color');
           const len=g.boundingBox.getSize(new THREE.Vector3()).length();
-          const mat=new THREE.PointsMaterial({size:len*0.002,sizeAttenuation:true,vertexColors:hasCol,color:hasCol?undefined:0xffffff});
-          obj=new THREE.Points(g,mat); piv=new THREE.Group(); piv.add(obj); piv.rotation.x=-Math.PI/2; scene.add(piv);
-        } else {
-          obj=m;
-          obj.traverse(n=>{ if(n.isMesh && !n.material) n.material=new THREE.MeshStandardMaterial({color:0xcccccc}); });
-          scene.add(obj);
-        }
-        const tgt = piv || obj;
-        const box = new THREE.Box3().setFromObject(tgt);
-        const size = box.getSize(new THREE.Vector3()).length();
-        const ctr = box.getCenter(new THREE.Vector3());
-        if(scale !== 1) tgt.scale.setScalar(scale);
-        const dist = size / (2 * Math.tan((cam.fov * Math.PI) / 360)) * 1.2;
-        cam.position.set(0,0,dist).add(ctr);
-        ctl.target.copy(ctr); ctl.update();
-        cam.near=dist/100; cam.far=dist*100; cam.updateProjectionMatrix();
-        if(offsetYRatio) tgt.position.y-=size*offsetYRatio;
-      },undefined,err=>{console.error('Loader error',err);});
-      const ani=()=>{ requestAnimationFrame(ani); if(rotateZ){ if(piv) piv.rotation.z-=0.01; else if(obj) obj.rotateOnWorldAxis(Z,-0.01); } ctl.update(); renderer.render(scene,cam); };
-      ani();
-    }
-
-    viewer('viewer1','6969 - Cloud.subsampled.ply',{rotateZ:true});
-    document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer9.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
-    viewer('viewer3','6969 - Cloud.subsampled.ply',{rotateZ:true,scale:1.8,offsetYRatio:0.125});
-  </script>
-  <div class="spacer"></div>
-</body>
-</html>
-```
-
-```
+          const mat=new THREE.PointsMaterial({size:len*0.002,sizeAttenuation:true,vertexColors
