@@ -23,20 +23,10 @@
     }
     .wa-btn img{height:2.2em;vertical-align:-0.2em;margin-left:.25em}
     /* espace de fond pour desktop */
-    .spacer {
-  display: none;
-}
-@media (min-width: 601px) {
-  .spacer {
-    display: block;
-    height: calc(100vh - 120px); /* Ajustez 120px selon votre besoin */
-    min-height: 500px; /* Hauteur minimale de sécurité */
-  }
-  body {
-    background-attachment: fixed;
-    background-size: cover;
-  }
-}
+    .spacer{display:none}
+    @media(min-width:601px){
+      .spacer{display:block;height:180vh} /* 100vh / 0.4 = 180vh to cover full parallax scroll */
+    }
 
     /* Styles pour la section Expériences */
     #frame-experiences ul{list-style:none;margin:0;padding:0}
@@ -156,10 +146,4 @@
     }
 
     viewer('viewer1', '6969 - Cloud.subsampled.ply', { rotateZ: true });
-    document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer9.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
-    viewer('viewer3', '6969 - Cloud.subsampled.ply', { rotateZ: true, scale: 1.8, offsetYRatio: 0.125 });
-  </script>
-  <div class="spacer"></div>
-</body>
-</html>
-
+    document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer9.
