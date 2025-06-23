@@ -25,7 +25,7 @@
     /* espace de fond pour desktop */
     .spacer{display:none}
     @media(min-width:601px){
-      .spacer{display:block;height:180vh} /* 100vh / 0.4 = 250vh to cover full parallax scroll */
+      .spacer{display:block;height:180vh} /* 100vh / 0.4 = 180vh to cover full parallax scroll */
     }
   </style>
   <script type="importmap">
@@ -61,80 +61,44 @@
       </ul>
     </div>
     <div id="frame-langues" class="viewer cvbox">
-      <h2>Langues &amp; Permis</h2>
+      <h2 language="Langues & Permit">Langues &amp; Permis</h2>
       <p>Anglais (intermédiaire) • Allemand (débutant) • Permis B</p>
       <h2>Centres d’intérêt</h2>
       <p>Cyclisme de loisir, photogrammétrie, Gaussian Splatting</p>
     </div>
     <div id="frame-experiences" class="viewer cvbox"><h2>Expériences</h2><ul>
-      <li>09/2024 – 12/2024 :<strong> Appuis ponctuels – <em>Edouard de Vimal Architecte</em></strong></li>
+      <li>09/2024 – 12/2024 :<strong> Appuis ponctuels – <em>Edouard de Vimal Architecte</em></strong></li>
       <li>06/2022 – 05/2023 :<strong> Charpentier – <em>Alliance Bois Métal</em></strong></li>
       <li>05/2021 – 02/2022 :<strong> Agent de production – <em>21 Degrés Sud</em></strong></li>
       <li>03/2017 – 03/2020 :<strong> Menuisier cintreur – <em>Formalis</em></strong></li>
       <li>01/2016 – 12/2016 :<strong> Réhabilitation – <em>Particulier</em></strong></li>
-      <li>09/2015 – 11/2015 :<strong> Pressage fermettes/ossature bois – </em><em>COBA</strong></li>
+      <li>09/2015 – 11/2015 :<strong> Pressage fermettes/ossature bois – <em>COBA</em></strong></li>
       <li>03/2015 – 08/2015 :<strong> Menuisier – <em>Société Santailer</em></strong></li>
       <li>09/2014 – 11/2014 :<strong> Stagiaire – <em>Menuiserie Pourtaud Yohan</em></strong></li>
       <li>2013 :             <strong> Technicien - <em>Alex Cobas, designer, artiste(42)</em></strong></li>
       <li>2011 – 2012 :      <strong> Interimaire - <em>Affaires à suivre, événementiel.</em></strong></li>
-      <li>2009 – 2010 :      <strong> Facteur d’équipe - <em>La poste </em></strong></li>
-      <li>2008 – 2009 :      <strong> Opérateur de saisie - <em>Police Technique et scientifique</em></strong></li></ul></div>
+      <li>2009 – 2010 :      <strong> Facteur d’équipe - <em>La poste</em></strong></li>
+      <li>2008 – 2009 :      <strong> Opérateur de saisie - <em>Police Technique et scientifique</em></strong></li>
+    </ul></div>
 
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
-    
-
     const Z = new THREE.Vector3(0,0,1);
-
     // Parallax effect (desktop only)
     const enableParallax=()=>{
-      if(window.innerWidth>600){
-        const factor=1.2; // vitesse du fond (plus rapide) // vitesse du fond
-        const onScroll=()=>{document.body.style.backgroundPositionY=-(window.scrollY*factor)+"px"};
-        window.addEventListener('scroll',onScroll,{passive:true});
-        onScroll();
-      }
-    };
-    enableParallax();
-
+      if(window.innerWidth>600){ const factor=1.2;const onScroll=()=>{document.body.style.backgroundPositionY=-(window.scrollY*factor)+"px"};window.addEventListener('scroll',onScroll,{passive:true});onScroll(); }};enableParallax();
     function viewer(id,file,{rotateZ=false,scale=1,offsetYRatio=0}={}){
-      const c=document.getElementById(id);
-
-      
-
-      // ----- THREE + PLY/OBJ -------------------------------------------
-      const scene=new THREE.Scene();scene.background=new THREE.Color(0xf6f6f9);
+      const c=document.getElementById(id);const scene=new THREE.Scene();scene.background=new THREE.Color(0xf6f6f9);
       const cam=new THREE.PerspectiveCamera(45,1,0.1,1000);cam.position.set(0,1,5);
       const renderer=new THREE.WebGLRenderer({antialias:true});c.appendChild(renderer.domElement);
-      const ctl=new OrbitControls(cam,renderer.domElement);ctl.enableDamping=true;
-      scene.add(new THREE.AmbientLight(0xffffff,0.6));const dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(2,4,2);scene.add(dl);
-      const rez=()=>{const w=c.clientWidth,h=c.clientHeight;cam.aspect=w/h;cam.updateProjectionMatrix();renderer.setSize(w,h);};rez();window.addEventListener('resize',rez);
-
-      const loader=file.endsWith('.ply')?new PLYLoader():new OBJLoader();loader.setPath('assets/');
-      let piv=null,obj=null;
-      loader.load(file,(m)=>{
-        if(file.endsWith('.ply')){
-          const g=m;g.computeBoundingBox();const hasCol=g.hasAttribute('color');
-          const len=g.boundingBox.getSize(new THREE.Vector3()).length();
-          const mat=new THREE.PointsMaterial({size:len*0.002,sizeAttenuation:true,vertexColors:hasCol,color:hasCol?undefined:0xffffff});
-          obj=new THREE.Points(g,mat);piv=new THREE.Group();piv.add(obj);piv.rotation.x=-Math.PI/2;scene.add(piv);
-        }else{obj=m;obj.traverse(n=>{if(n.isMesh&&!n.material)n.material=new THREE.MeshStandardMaterial({color:0xcccccc});});scene.add(obj);}        const tgt = piv || obj;
-        const box = new THREE.Box3().setFromObject(tgt);
-        const size = box.getSize(new THREE.Vector3()).length();        const ctr = box.getCenter(new THREE.Vector3());
-        if (scale !== 1) tgt.scale.setScalar(scale); // appliquer le zoom APRÈS avoir mesuré size
-        const dist = size / (2 * Math.tan((cam.fov * Math.PI) / 360)) * 1.2;cam.position.set(0,0,dist).add(ctr);ctl.target.copy(ctr);ctl.update();cam.near=dist/100;cam.far=dist*100;cam.updateProjectionMatrix();
-        if(offsetYRatio!==0)tgt.position.y-=size*offsetYRatio;
-      },undefined,err=>{console.error('Loader error',err);});
-
-      const ani=()=>{requestAnimationFrame(ani);if(rotateZ){if(piv)piv.rotation.z-=0.01;else if(obj)obj.rotateOnWorldAxis(Z,-0.01);}ctl.update();renderer.render(scene,cam);} ;ani();
-    }
-
-    viewer('viewer1','6969 - Cloud.subsampled.ply',{rotateZ:true});
-    // viewer2 → iframe Supersplat complet
-    document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer9.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
+      const ctl=new OrbitControls(cam,renderer.domElement);ctl.enableDamping=true;scene.add(new THREE.AmbientLight(0xffffff,0.6));const dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(2,4,2);scene.add(dl);
+      const rez=()=>{const w=c.clientWidth,h=c.clientHeight;cam.aspect=w/h;cam.updateProjectionMatrix();renderer.setSize(w,h);} ;rez();window.addEventListener('resize',rez);
+      const loader=file.endsWith('.ply')?new PLYLoader():new OBJLoader();loader.setPath('assets/');let piv=null,obj=null;
+      loader.load(file,(m)=>{if(file.endsWith('.ply')){const g=m;g.computeBoundingBox();const hasCol=g.hasAttribute('color');const len=g.boundingBox.getSize(new THREE.Vector3()).length();const mat=new THREE.PointsMaterial({size:len*0.002,sizeAttenuation:true,vertexColors:hasCol,color:hasCol?undefined:0xffffff});obj=new THREE.Points(g,mat);piv=new THREE.Group();piv.add(obj);piv.rotation.x=-Math.PI/2;scene.add(piv);}else{obj=m;obj.traverse(n=>{if(n.isMesh&&!n.material)n.material=new THREE.MeshStandardMaterial({color:0xcccccc});});scene.add(obj);}const tgt=piv||obj;const box=new THREE.Box3().setFromObject(tgt);const size=box.getSize(new THREE.Vector3()).length();const ctr=box.getCenter(new THREE.Vector3());if(scale!==1)tgt.scale.setScalar(scale);const dist=size/(2*Math.tan((cam.fov*Math.PI)/360))*1.2;cam.position.set(0,0,dist).add(ctr);ctl.target.copy(ctr);ctl.update();cam.near=dist/100;cam.far=dist*100;cam.updateProjectionMatrix();if(offsetYRatio)tgt.position.y-=size*offsetYRatio;},undefined,err=>{console.error('Loader error',err);});const ani=()=>{requestAnimationFrame(ani);if(rotateZ){if(piv)piv.rotation.z-=0.01;else if(obj)obj.rotateOnWorldAxis(Z,-0.01);}ctl.update();renderer.render(scene,cam);} ;ani();}
+    viewer('viewer1','6969 - Cloud.subsampled.ply',{rotateZ:true});document.getElementById('viewer2').innerHTML='<iframe src="assets/cv-viewer9.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
     viewer('viewer3','6969 - Cloud.subsampled.ply',{rotateZ:true,scale:1.8,offsetYRatio:0.125});
   </script>
   <div class="spacer"></div>
