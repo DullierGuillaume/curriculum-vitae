@@ -10,7 +10,7 @@
     #infos,h1,h2{font-family:'Rawest',system-ui,sans-serif}
     #infos{position:fixed;top:1rem;left:1rem;z-index:10;background:#ffffffcc;padding:.5rem 1rem;border-radius:.5rem}
     .viewer{box-sizing:border-box;width:100%;max-width:800px;height:500px;margin:120px auto 2rem;border:2px solid #ddd;border-radius:.75rem;box-shadow:0 4px 12px rgba(0,0,0,.1);background:#e5e7eb;overflow:hidden}
-    .viewer.cvbox{$1;padding-left:1rem;}
+    .viewer.cvbox{box-sizing:border-box;height:auto;overflow:visible;background:rgba(255,255,255,0.65);backdrop-filter:blur(2px);padding:1rem; margin:1rem auto;}
     @media(max-width:600px){
       #infos{left:50%;transform:translateX(-50%);top:.5rem;padding:.4rem .8rem;text-align:center}
       body{padding-top:50vw}
@@ -121,4 +121,3 @@
   <div class="spacer"></div>
 </body>
 </html>
-
