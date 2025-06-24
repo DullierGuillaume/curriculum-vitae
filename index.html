@@ -49,6 +49,12 @@
     text-align: center;
   }
 
+  .carrousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
   .carrousel {
     display: flex;
     scroll-snap-type: x mandatory;
@@ -72,6 +78,44 @@
     max-height: 300px; /* Hauteur mobile */
     object-fit: contain;
     padding: 0.5rem;
+  }
+
+  .carrousel-arrow {
+    position: absolute;
+    z-index: 1;
+    background: rgba(255,255,255,0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+    transition: all 0.3s ease;
+  }
+
+  .carrousel-arrow:hover {
+    background: rgba(255,255,255,0.9);
+    transform: scale(1.1);
+  }
+
+  .left-arrow {
+    left: 10px;
+  }
+
+  .right-arrow {
+    right: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .carrousel-arrow {
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+    }
   }
 
   /* Version Desktop (écrans > 600px) */
@@ -128,7 +172,7 @@
       <h2>Langues &amp; Permis</h2>
       <p> •Anglais – compréhension écrite avancée : Lecture au quotidien de contenus variés : documentations techniques, tutoriels, rapports open source et papiers de recherche.</p>
       <p> •Permis B</p>
-      <h2>Centres d’intérêt</h2>
+      <h2>Centres d'intérêt</h2>
       <p> Photogrammétrie, Gaussian Splatting, Edge detection, Cyclisme de loisir, </p>
     </div>
     <div id="frame-experiences" class="viewer cvbox"><h2>Expériences</h2><ul>
@@ -146,21 +190,25 @@
       <li><span class="date">2008 2009 </span><span class="job"><strong>Opérateur de saisie – <em>Police Technique et scientifique</em></strong></span></li>
     </ul></div>
 
-  <!-- Carrousel Section -->
-<div class="carrousel-container">
-  <h2>Portfolio</h2>
-  <div class="carrousel">
-    <div class="carrousel-slide">
-      <img src="assets/coupechape.jpg" alt="Projet BIM 1">
-    </div>
-    <div class="carrousel-slide">
-      <img src="assets/coupe portique.jpg" alt="Projet BIM 2">
-    </div>
-    <div class="carrousel-slide">
-      <img src="assets/coupe chape_02.jpg" alt="Projet BIM 3">
+  <!-- Nouvelle section Carrousel avec flèches -->
+  <div class="carrousel-container">
+    <h2>Portfolio</h2>
+    <div class="carrousel-wrapper">
+      <button class="carrousel-arrow left-arrow" aria-label="Diapositive précédente">&#10094;</button>
+      <div class="carrousel">
+        <div class="carrousel-slide">
+          <img src="assets/coupechape.jpg" alt="Projet BIM 1">
+        </div>
+        <div class="carrousel-slide">
+          <img src="assets/coupe portique.jpg" alt="Projet BIM 2">
+        </div>
+        <div class="carrousel-slide">
+          <img src="assets/coupe chape_02.jpg" alt="Projet BIM 3">
+        </div>
+      </div>
+      <button class="carrousel-arrow right-arrow" aria-label="Diapositive suivante">&#10095;</button>
     </div>
   </div>
-</div>
 
   <script type="module">
     import * as THREE from 'three';
@@ -169,7 +217,7 @@
     import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
     const Z = new THREE.Vector3(0,0,1);
     
-    // Nouvelle version avec limitation du scroll
+    // Version avec limitation du scroll
     const enableParallax = () => {
       if (window.innerWidth > 600) {
         const factor = 1.2;
@@ -237,8 +285,32 @@
     viewer('viewer1', '6969 - Cloud.subsampled.ply', { rotateZ: true });
     document.getElementById('viewer2').innerHTML = '<iframe src="assets/cv-viewer9.html" style="border:0;width:100%;height:100%;" loading="lazy"></iframe>';
     viewer('viewer3', '6969 - Cloud.subsampled.ply', { rotateZ: true, scale: 1.8, offsetYRatio: 0.125 });
+
+    // Script pour les flèches du carrousel
+    document.addEventListener('DOMContentLoaded', () => {
+      const carrousel = document.querySelector('.carrousel');
+      const leftArrow = document.querySelector('.left-arrow');
+      const rightArrow = document.querySelector('.right-arrow');
+      const slideWidth = carrousel.clientWidth;
+
+      leftArrow.addEventListener('click', () => {
+        carrousel.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+      });
+
+      rightArrow.addEventListener('click', () => {
+        carrousel.scrollBy({ left: slideWidth, behavior: 'smooth' });
+      });
+
+      // Masquer les flèches en fonction de la position
+      const updateArrows = () => {
+        leftArrow.style.display = carrousel.scrollLeft <= 10 ? 'none' : 'flex';
+        rightArrow.style.display = carrousel.scrollLeft >= carrousel.scrollWidth - carrousel.clientWidth - 10 ? 'none' : 'flex';
+      };
+
+      carrousel.addEventListener('scroll', updateArrows);
+      updateArrows();
+    });
   </script>
   <div class="spacer"></div>
 </body>
 </html>
-
