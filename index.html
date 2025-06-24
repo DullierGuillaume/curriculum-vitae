@@ -73,9 +73,20 @@
     padding: 0.5rem;
   }
 
-  /* Masquer la barre de défilement */
+ /* Style de la barre de défilement */
   .carrousel::-webkit-scrollbar {
-    display: none;
+    height: 8px;
+  }
+  .carrousel::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  .carrousel::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
+  .carrousel::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
   }
   </style>
   <script type="importmap">
