@@ -39,6 +39,44 @@
 .stars {
   margin-left: 1em;
 }
+
+    /* Styles du carrousel */
+  .carrousel-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .carrousel {
+    display: flex;
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(2px);
+  }
+
+  .carrousel-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+  }
+
+  .carrousel-slide img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    padding: 0.5rem;
+  }
+
+  /* Masquer la barre de défilement */
+  .carrousel::-webkit-scrollbar {
+    display: none;
+  }
   </style>
   <script type="importmap">
     {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/"}}
@@ -88,6 +126,22 @@
       <li><span class="date">2009 2010 </span><span class="job"><strong>Facteur d’équipe – <em>La Poste</em></strong></span></li>
       <li><span class="date">2008 2009 </span><span class="job"><strong>Opérateur de saisie – <em>Police Technique et scientifique</em></strong></span></li>
     </ul></div>
+
+  <!-- Carrousel Section -->
+<div class="carrousel-container">
+  <h2>Portfolio</h2> <!-- Titre optionnel -->
+  <div class="carrousel">
+    <div class="carrousel-slide">
+      <img src="assets/image1.jpg" alt="Projet BIM 1">
+    </div>
+    <div class="carrousel-slide">
+      <img src="assets/image2.jpg" alt="Projet BIM 2">
+    </div>
+    <div class="carrousel-slide">
+      <img src="assets/image3.jpg" alt="Projet BIM 3">
+    </div>
+  </div>
+</div>
 
   <script type="module">
     import * as THREE from 'three';
