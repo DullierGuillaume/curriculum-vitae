@@ -99,6 +99,18 @@
   .carrousel::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.5);
   }
+    @media (min-width: 601px) {
+  /* Calcule la hauteur totale pour limiter le scroll */
+  body {
+    height: calc(100vh + 180vh * 0.4); /* Ajustez 0.4 selon votre facteur de parallaxe */
+    overflow-y: auto; /* Permet le scroll mais limité par la hauteur calculée */
+  }
+
+  /* Ajuste le spacer pour correspondre à la hauteur de l'image */
+  .spacer {
+    height: 180vh; /* Doit correspondre à la hauteur totale de l'image */
+  }
+}
   </style>
   <script type="importmap">
     {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/"}}
@@ -180,8 +192,22 @@
         onScroll();
       }
     };
-    enableParallax();
+    const enableParallax = () => {
+  if (window.innerWidth > 600) {
+    const factor = 1.2;
+    const maxScroll = document.querySelector('.spacer').offsetHeight - window.innerHeight;
 
+    const onScroll = () => {
+      const scrollY = Math.min(window.scrollY, maxScroll);
+      document.body.style.backgroundPositionY = -(scrollY * factor) + "px";
+      document.documentElement.style.scrollBehavior = 'auto'; // Désactive le smooth scroll natif
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+};
+enableParallax();
     function viewer(id, file, { rotateZ = false, scale = 1, offsetYRatio = 0 } = {}) {
       const c = document.getElementById(id);
       const scene = new THREE.Scene(); scene.background = new THREE.Color(0xf6f6f9);
