@@ -40,7 +40,7 @@
   margin-left: 1em;
 }
 
-    /* Styles du carrousel */
+    /* Styles du carrousel - Mobile par défaut */
   .carrousel-container {
     width: 100%;
     max-width: 800px;
@@ -58,6 +58,7 @@
     border-radius: 0.5rem;
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(2px);
+    padding-bottom: 8px;
   }
 
   .carrousel-slide {
@@ -68,10 +69,20 @@
   .carrousel-slide img {
     width: 100%;
     height: auto;
-    max-height: 300px;
+    max-height: 300px; /* Hauteur mobile */
     object-fit: contain;
     padding: 0.5rem;
   }
+
+  /* Version Desktop (écrans > 600px) */
+  @media (min-width: 601px) {
+    .carrousel-slide img {
+      max-height: 600px; /* Hauteur doublée */
+    }
+  }
+
+  /* ... (le reste de vos styles, y compris la barre de défilement, reste inchangé) ... */
+</style>
 
  /* Style de la barre de défilement */
   .carrousel::-webkit-scrollbar {
