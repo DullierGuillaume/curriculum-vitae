@@ -81,10 +81,7 @@
     }
   }
 
-  /* ... (le reste de vos styles, y compris la barre de défilement, reste inchangé) ... */
-
-
- /* Style de la barre de défilement */
+  /* Style de la barre de défilement */
   .carrousel::-webkit-scrollbar {
     height: 8px;
   }
@@ -145,13 +142,13 @@
       <li><span class="date">09/2014   11/2014 </span><span class="job"><strong>Stagiaire – <em>Menuiserie Pourtaud Yohan</em></strong></span></li>
       <li><span class="date">2013 </span><span class="job"><strong>Technicien – <em>Alex Cobas, designer, artiste(42)</em></strong></span></li>
       <li><span class="date">2011 2012 </span><span class="job"><strong>Interimaire – <em>Affaires à suivre, événementiel.</em></strong></span></li>
-      <li><span class="date">2009 2010 </span><span class="job"><strong>Facteur d’équipe – <em>La Poste</em></strong></span></li>
+      <li><span class="date">2009 2010 </span><span class="job"><strong>Facteur d'équipe – <em>La Poste</em></strong></span></li>
       <li><span class="date">2008 2009 </span><span class="job"><strong>Opérateur de saisie – <em>Police Technique et scientifique</em></strong></span></li>
     </ul></div>
 
   <!-- Carrousel Section -->
 <div class="carrousel-container">
-  <h2>Portfolio</h2> <!-- Titre optionnel -->
+  <h2>Portfolio</h2>
   <div class="carrousel">
     <div class="carrousel-slide">
       <img src="assets/coupechape.jpg" alt="Projet BIM 1">
@@ -171,12 +168,29 @@
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
     import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
     const Z = new THREE.Vector3(0,0,1);
-    // Parallax effect (desktop only)
+    
+    // Nouvelle version avec limitation du scroll
     const enableParallax = () => {
       if (window.innerWidth > 600) {
         const factor = 1.2;
-        const onScroll = () => { document.body.style.backgroundPositionY = -(window.scrollY * factor) + "px"; };
+        const lastElement = document.querySelector('.carrousel-container');
+        let maxScroll = lastElement.offsetTop + lastElement.offsetHeight - window.innerHeight;
+
+        const updateMaxScroll = () => {
+          maxScroll = lastElement.offsetTop + lastElement.offsetHeight - window.innerHeight;
+        };
+
+        const onScroll = () => {
+          const scrollY = Math.min(window.scrollY, maxScroll);
+          document.body.style.backgroundPositionY = -(scrollY * factor) + "px";
+          
+          if (window.scrollY > maxScroll) {
+            window.scrollTo(0, maxScroll);
+          }
+        };
+
         window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', updateMaxScroll);
         onScroll();
       }
     };
