@@ -511,6 +511,27 @@
       carrousel.addEventListener('scroll', updateArrows);
       updateArrows();
     });
+    const goToPDF = () => { window.location.href = 'cv.pdf'; };
+
+  // 1) Quand l'utilisateur ouvre la boîte d'impression
+  if ('onbeforeprint' in window) {
+    window.onbeforeprint = goToPDF;
+  }
+
+  // 2) Ctrl/Cmd + P
+  document.addEventListener('keydown', (e) => {
+    const isPrint = (e.key && e.key.toLowerCase() === 'p') && (e.ctrlKey || e.metaKey);
+    if (isPrint) {
+      e.preventDefault();
+      goToPDF();
+    }
+  });
+
+  // 3) Certains navigateurs exposent matchMedia('print')
+  const mq = window.matchMedia && window.matchMedia('print');
+  if (mq && mq.addListener) {
+    mq.addListener((m) => { if (m.matches) goToPDF(); });
+  }
   </script>
   <div class="spacer"></div>
 </body>
