@@ -530,18 +530,35 @@ const goToPDF = () => {
     }
   });
 
-  // 3) Fallback : certains navigateurs exposent matchMedia('print')
-  const mq = window.matchMedia && window.matchMedia('print');
-  if (mq && mq.addListener) {
-    mq.addListener((m) => { if (m.matches) goToPDF(); });
-  }
-    // Forcer un refresh automatique une seule fois après le chargement complet
+  // Recharger une seule fois après le chargement complet — version compatible Chrome
   window.addEventListener("load", () => {
-    if (!sessionStorage.getItem("reloaded")) {
-      sessionStorage.setItem("reloaded", "true");
-      window.location.reload();
+    const FLAG = "reloaded_once";
+
+    // Détecter si cette navigation est déjà un "reload"
+    // (PerformanceNavigationTiming remplace performance.navigation.type)
+    const navEntry = performance.getEntriesByType("navigation")[0];
+    const isAlreadyReload = !!navEntry && navEntry.type === "reload";
+
+    if (isAlreadyReload) {
+      // On est déjà sur le second passage -> ne pas relancer
+      sessionStorage.removeItem(FLAG);
+      return;
+    }
+
+    // Si on n'a pas encore rechargé une fois, on le fait maintenant
+    if (!sessionStorage.getItem(FLAG)) {
+      sessionStorage.setItem(FLAG, "1");
+      // petit délai pour laisser le rendu se stabiliser
+      setTimeout(() => {
+        // Double garde : si entre-temps c’est devenu un reload, on n’insiste pas
+        const nav2 = performance.getEntriesByType("navigation")[0];
+        if (!nav2 || nav2.type !== "reload") {
+          window.location.reload();
+        }
+      }, 0);
     } else {
-      sessionStorage.removeItem("reloaded");
+      // On revient après le reload -> on nettoie et c'est tout
+      sessionStorage.removeItem(FLAG);
     }
   });
   </script>
