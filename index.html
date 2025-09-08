@@ -535,6 +535,15 @@ const goToPDF = () => {
   if (mq && mq.addListener) {
     mq.addListener((m) => { if (m.matches) goToPDF(); });
   }
+    // Forcer un refresh automatique une seule fois après le chargement complet
+  window.addEventListener("load", () => {
+    if (!sessionStorage.getItem("reloaded")) {
+      sessionStorage.setItem("reloaded", "true");
+      window.location.reload();
+    } else {
+      sessionStorage.removeItem("reloaded");
+    }
+  });
   </script>
   <div class="spacer"></div>
 </body>
