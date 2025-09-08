@@ -530,37 +530,34 @@ const goToPDF = () => {
     }
   });
 
-  // Recharger une seule fois après le chargement complet — version compatible Chrome
-  window.addEventListener("load", () => {
-    const FLAG = "reloaded_once";
+  (function () {
+    const url = new URL(window.location.href);
 
-    // Détecter si cette navigation est déjà un "reload"
-    // (PerformanceNavigationTiming remplace performance.navigation.type)
-    const navEntry = performance.getEntriesByType("navigation")[0];
-    const isAlreadyReload = !!navEntry && navEntry.type === "reload";
-
-    if (isAlreadyReload) {
-      // On est déjà sur le second passage -> ne pas relancer
-      sessionStorage.removeItem(FLAG);
-      return;
+    function doOneTimeNavigation() {
+      // Evite toute boucle: si déjà marqué "once", on ne refait rien
+      if (!url.searchParams.has('once')) {
+        url.searchParams.set('once', '1');
+        // Remplace l’URL (pas d’entrée d’historique), provoque un rechargement unique
+        window.location.replace(url.toString());
+      } else {
+        // On est de retour après la "navigation unique" -> nettoie l’URL
+        url.searchParams.delete('once');
+        history.replaceState(null, '', url.toString());
+      }
     }
 
-    // Si on n'a pas encore rechargé une fois, on le fait maintenant
-    if (!sessionStorage.getItem(FLAG)) {
-      sessionStorage.setItem(FLAG, "1");
-      // petit délai pour laisser le rendu se stabiliser
-      setTimeout(() => {
-        // Double garde : si entre-temps c’est devenu un reload, on n’insiste pas
-        const nav2 = performance.getEntriesByType("navigation")[0];
-        if (!nav2 || nav2.type !== "reload") {
-          window.location.reload();
-        }
-      }, 0);
+    // Ne lance la navigation qu’en onglet visible pour éviter les blocages
+    if (document.visibilityState === 'visible') {
+      doOneTimeNavigation();
     } else {
-      // On revient après le reload -> on nettoie et c'est tout
-      sessionStorage.removeItem(FLAG);
+      document.addEventListener('visibilitychange', function onVis() {
+        if (document.visibilityState === 'visible') {
+          document.removeEventListener('visibilitychange', onVis);
+          doOneTimeNavigation();
+        }
+      });
     }
-  });
+  })();
   </script>
   <div class="spacer"></div>
 </body>
